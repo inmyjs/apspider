@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>文章小蜘蛛</title>
+    <link rel="stylesheet" href="./assest/utils/alertify_old/alertify.core.css"/>
+    <link rel="stylesheet" href="./assest/utils/alertify_old/default.css"/>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="./assest/element-ui/lib/theme-chalk/index.css">
+    <!-- 引入组件库 -->
+    <script src="./assest/vue.2.5.13.js"></script>
+    <script src="./assest/element-ui/lib/index.js"></script>
+    <script src="./assest/utils/jquery-3.2.1.min.js"></script>
+    <script src="./assest/utils/alertify_old/alertify.min.js"></script>
+    <script src="./assest/utils/common.js"></script>
+    <link rel="stylesheet" href="./assest/common.css"/>
+    <script type="application/javascript">
+        var Spider={};
+    </script>
+</head>
+<body style="margin: 0;">
+<div id="app" style="position: absolute;width: 100%;bottom: 0;top:0;">
+<el-container style="height: 100%;">
+    <el-aside style="width: 200px;background-color:#545c64;height: 100%">
+        <el-menu
+                default-active="1"
+                class="el-menu-vertical-demo"
+                @open="handleOpen"
+                @close="handleClose"
+                background-color="#545c64"
+                text-color="#fff"
+                active-text-color="#ffd04b">
+            <!--<el-submenu index="1">
+                <template slot="title">
+                    <i class="el-icon-location"></i>
+                    <span>导航一</span>
+                </template>
+                <el-menu-item-group>
+                    <template slot="title">分组一</template>
+                    <el-menu-item index="1-1">选项1</el-menu-item>
+                    <el-menu-item index="1-2">选项2</el-menu-item>
+                </el-menu-item-group>
+                <el-menu-item-group title="分组2">
+                    <el-menu-item index="1-3">选项3</el-menu-item>
+                </el-menu-item-group>
+                <el-submenu index="1-4">
+                    <template slot="title">选项4</template>
+                    <el-menu-item index="1-4-1">选项1</el-menu-item>
+                </el-submenu>
+            </el-submenu>-->
+            <el-menu-item index="1">
+                <i class="el-icon-menu"></i>
+                <span slot="title">新榜</span>
+            </el-menu-item>
+            <el-menu-item index="2">
+                <i class="el-icon-setting"></i>
+                <span slot="title">简书</span>
+            </el-menu-item>
+        </el-menu>
+    </el-aside>
+    <el-container>
+    <el-main class="el-main">
+        <el-tabs v-model="activeName" @tab-click="handleClick">
+            <el-tab-pane label="热文爬虫" name="first">
+                <el-row>
+                    <el-col :span="18">
+                        <el-button type="primary" @click="login">{{login_text}}</el-button>
+                    <el-select v-model="spider_categorys"  placeholder="请选择" style="width: 80%" multiple>
+                        <el-option label="时事" value="资讯|时事"></el-option>
+                        <el-option label="民生" value="资讯|民生"></el-option>
+                        <el-option label="财富" value="资讯|财富"></el-option>
+                        <el-option label="科技" value="资讯|科技"></el-option>
+                        <el-option label="创业" value="资讯|创业"></el-option>
+                        <el-option label="汽车" value="资讯|汽车"></el-option>
+                        <el-option label="楼市" value="资讯|楼市"></el-option>
+                        <el-option label="职场" value="资讯|职场"></el-option>
+                        <el-option label="教育" value="资讯|教育"></el-option>
+                        <el-option label="学术" value="资讯|学术"></el-option>
+                        <el-option label="政务" value="资讯|政务"></el-option>
+                        <el-option label="企业" value="资讯|企业"></el-option>
+                        <el-option label="文化" value="生活|文化"></el-option>
+                        <el-option label="百科" value="生活|百科"></el-option>
+                        <el-option label="健康" value="生活|健康"></el-option>
+                        <el-option label="时尚" value="生活|时尚"></el-option>
+                        <el-option label="美食" value="生活|美食"></el-option>
+                        <el-option label="乐活" value="生活|乐活"></el-option>
+                        <el-option label="旅行" value="生活|旅行"></el-option>
+                        <el-option label="幽默" value="生活|幽默"></el-option>
+                        <el-option label="情感" value="生活|情感"></el-option>
+                        <el-option label="体娱" value="生活|体娱"></el-option>
+                        <el-option label="美体" value="生活|美体"></el-option>
+                        <el-option label="文摘" value="生活|文摘"></el-option>
+                    </el-select>
+                    </el-col>
+                    <el-col :span="6">
+                <el-button type="success" @click="start" :loading="start_loading">{{start_text}}</el-button>
+                <el-button type="danger" @click="close" >关闭</el-button>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="6">
+                        <img style="height: 200px;width: 200px;display: none;" id="login_code" src=""/>
+                    </el-col>
+                </el-row>
+                <iframe id="pay_iframe" class="iframe" src="" nwfaketop frameborder="0" style="display: none;width: 100%;"></iframe>
+            </el-tab-pane>
+            <el-tab-pane label="文章搜索" name="second">
+                <iframe id="search_iframe" class="iframe" src="" nwfaketop frameborder="0" style="display: none;"></iframe>
+                <el-date-picker
+                        v-model="search_dates"
+                        type="daterange"
+                        align="right"
+                        unlink-panels
+                        range-separator="至"
+                        start-placeholder="开始日期"
+                        end-placeholder="结束日期"
+                        :picker-options="pickerOptions">
+                </el-date-picker>
+                <el-input placeholder="请输入关键词" v-model="containAdd" style="width: 400px;">
+                    <el-select v-model="category" slot="prepend" placeholder="请选择" style="width: 100px;" clearable>
+                        <el-option label="时事" value="时事"></el-option>
+                        <el-option label="民生" value="民生"></el-option>
+                        <el-option label="财富" value="财富"></el-option>
+                        <el-option label="科技" value="科技"></el-option>
+                        <el-option label="创业" value="创业"></el-option>
+                        <el-option label="汽车" value="汽车"></el-option>
+                        <el-option label="楼市" value="楼市"></el-option>
+                        <el-option label="职场" value="职场"></el-option>
+                        <el-option label="教育" value="教育"></el-option>
+                        <el-option label="学术" value="学术"></el-option>
+                        <el-option label="政务" value="政务"></el-option>
+                        <el-option label="企业" value="企业"></el-option>
+                        <el-option label="文化" value="文化"></el-option>
+                        <el-option label="百科" value="百科"></el-option>
+                        <el-option label="健康" value="健康"></el-option>
+                        <el-option label="时尚" value="时尚"></el-option>
+                        <el-option label="美食" value="美食"></el-option>
+                        <el-option label="乐活" value="乐活"></el-option>
+                        <el-option label="旅行" value="旅行"></el-option>
+                        <el-option label="幽默" value="幽默"></el-option>
+                        <el-option label="情感" value="情感"></el-option>
+                        <el-option label="体娱" value="体娱"></el-option>
+                        <el-option label="美体" value="美体"></el-option>
+                        <el-option label="文摘" value="文摘"></el-option>
+                    </el-select>
+                    <el-button slot="append" icon="el-icon-search" @click="search"></el-button>
+                </el-input>
+                <ul id="search_out">
+                    <li v-for="item in searchs">
+                        <el-alert :title="item.title" type="warning" :closable="false" :description="item.highlight">
+                        </el-alert>
+                    </li>
+                </ul>
+            </el-tab-pane>
+        </el-tabs>
+    </el-main>
+    <el-footer height="250px;">
+        <el-row>
+            <el-col :span="18">
+            <h3>日志：</h3>
+            </el-col>
+            <el-col :span="6" style="text-align: right;">
+            <el-button type="text" @click="clear" >清空</el-button>
+            </el-col>
+        </el-row>
+        <ul id="logout">
+            <li v-for="item in logs">
+                <el-alert :title="item.title" :type="item.type" :closable="false" show-icon>
+                </el-alert>
+            </li>
+        </ul>
+    </el-footer>
+    </el-container>
+</el-container>
+</div>
+<script src="app/md5.min.js"></script>
+<script src="app/API.js"></script>
+<script src="app/task.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

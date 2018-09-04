@@ -1,0 +1,7 @@
+ul li{
+    list-style-type:none;
+}
+#logout{
+    height: 250px;
+    overflow: auto;
+}

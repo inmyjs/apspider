@@ -1,0 +1,43 @@
+{
+  "name": "apspider",
+  "main": "index.html",
+  "build": "1445048139741",
+  "version": "0.0.1",
+  "homepage": "http://www.apskin.com",
+  "description": "文章搜索",
+  "window": {
+    "title": "文章搜索",
+    "icon": "assest/img/logo.png",
+    "position": "center",
+    "width": 1024,
+    "height": 720,
+    "toolbar": true,
+    "frame": true,
+    "resizable": true,
+    "min_width": 1028
+  },
+  "node-main": "node-main.js",
+  "contributors": [
+    {
+      "name": "天启工作室",
+      "email": "573391755@qq.com",
+      "web": "http://www.apskin.com"
+    }
+  ],
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "crypto": "0.0.3",
+    "forever": "^0.15.3",
+    "iconv-lite": "^0.4.15",
+    "lodash": "^4.17.2",
+    "moment": "^2.19.2",
+    "node-schedule": "^1.2.5",
+    "nodemailer": "^2.6.4",
+    "qs": "^6.5.1"
+  },
+  "devDependencies": {
+    "@types/node": "^8.0.53",
+    "rimraf": "^2.6.2",
+    "typescript": "^2.6.1"
+  }
+}
