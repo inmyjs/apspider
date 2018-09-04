@@ -30,6 +30,7 @@
 ![](https://raw.githubusercontent.com/wiki/inmyjs/apspider/images/3.png)
 3. 选择行业，点击开始即可，程序将获取所选行业下公众号的热门文章及最新发布文章，并存储至文件中
 > 最初的版本是一键获取全部行业的文章，后面想想，还是自己想获取哪些行业的就获取哪些行业的
+
 ![](https://raw.githubusercontent.com/wiki/inmyjs/apspider/images/4.png)
 这是我的后台效果：
 ![](https://raw.githubusercontent.com/wiki/inmyjs/apspider/images/5.png)
